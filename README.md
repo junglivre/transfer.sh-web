@@ -1,41 +1,56 @@
 # transfer.sh-web
 
-This repository contains the web frontend for [transfer.sh](https://github.com/dutchcoders/transfer.sh/).
+Este repositório contém o frontend web para [transfer.sh](https://github.com/dutchcoders/transfer.sh/), um serviço de compartilhamento de arquivos via linha de comando.
 
+## Estrutura do Projeto
 
-## How to use it 
+O projeto contém as seguintes páginas:
+- `index.html` - Página principal
+- `download.html` - Página de download padrão
+- `download.audio.html` - Visualizador de arquivos de áudio
+- `download.image.html` - Visualizador de imagens
+- `download.video.html` - Visualizador de vídeos
+- `download.markdown.html` - Visualizador de arquivos markdown
+- `download.sandbox.html` - Ambiente sandbox para visualização segura
 
-You must specify `web-path` directory, pointing to `dist` generated folder (Grunt & bindata)
+## Como Usar
 
-Sample :
+Para executar o serviço, você precisa especificar o diretório `web-path` apontando para a pasta que contém os arquivos HTML.
+
+Exemplo com Docker:
+```bash
+docker run -d \
+  -v /pasta/uploads:/uploads \
+  -v /pasta/web:/webapp \
+  --publish 5000:8080 \
+  dutchcoders/transfer.sh:latest \
+  --provider local \
+  --basedir /uploads \
+  --web-path /webapp/
 ```
-docker run -d -v /folder:/uploads -v /folder/dist:/webapp --publish 5000:8080 dutchcoders/transfer.sh:latest --provider local --basedir /uploads --web-path /webapp/
-```
-## Requirement 
-You must install first : 
-* Grunt
-* Bower
-* Go & go-bindata (go get -u github.com/shuLhan/go-bindata/...)
 
-## Initialization
+## Desenvolvimento
 
-NPM 
-```
+### Pré-requisitos
+- Node.js e NPM
+- Go
+- go-bindata (`go get -u github.com/shuLhan/go-bindata/...`)
+
+### Instalação
+1. Instale as dependências:
+```bash
 npm install
 ```
 
-Bower
-
-*Please*, specify to Bower where to install its packets via .bowerrc, to the `src/bower_components` directory
-```
-bower install
+2. Gere os arquivos estáticos:
+```bash
+npm run build
 ```
 
-## Build
-```
-$ grunt build
-$ go generate .
+3. Gere os binários Go:
+```bash
+go generate .
 ```
 
-## Verify
-You should see a `dist` directory, where all the basic .html are generated.
+## Licença
+Veja o arquivo [LICENSE](LICENSE) para detalhes.
