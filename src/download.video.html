@@ -149,11 +149,53 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn {
+            background: #27c93f;
         }
 
         .download-btn:hover, .direct-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(83, 149, 207, 0.3);
+        }
+
+        .download-btn:hover {
+            box-shadow: 0 10px 25px rgba(39, 201, 63, 0.3);
+        }
+
+        .download-btn.clicked, .direct-btn.clicked {
+            animation: button-glow 1.5s ease-out;
+        }
+
+        .download-btn.clicked {
+            animation: button-glow-green 1.5s ease-out;
+        }
+
+        @keyframes button-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(83, 149, 207, 0.4);
+            }
+            20% {
+                box-shadow: 0 0 20px 10px rgba(83, 149, 207, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(83, 149, 207, 0);
+            }
+        }
+
+        @keyframes button-glow-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 201, 63, 0.4);
+            }
+            20% {
+                box-shadow: 0 0 20px 10px rgba(39, 201, 63, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 201, 63, 0);
+            }
         }
 
         .direct-btn {
@@ -180,11 +222,29 @@
             display: inline-block;
             transition: all 0.3s ease;
             margin-top: 15px;
+            position: relative;
+            overflow: hidden;
         }
 
         .delete-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(255, 95, 86, 0.3);
+        }
+
+        .delete-btn.clicked {
+            animation: button-glow-red 1.5s ease-out;
+        }
+
+        @keyframes button-glow-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 95, 86, 0.4);
+            }
+            20% {
+                box-shadow: 0 0 20px 10px rgba(255, 95, 86, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 95, 86, 0);
+            }
         }
 
         .toast {
@@ -347,6 +407,12 @@
                 `;
                 btn.style.background = 'rgba(39, 201, 63, 0.2)';
                 btn.style.color = '#27c93f';
+                btn.classList.add('clicked');
+                
+                // Remover a classe depois da animação
+                setTimeout(() => {
+                    btn.classList.remove('clicked');
+                }, 1500);
                 
                 // Criar e mostrar o toast
                 const toast = document.createElement('div');
@@ -406,6 +472,11 @@
             
             deleteBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                deleteBtn.classList.add('clicked');
+                setTimeout(() => {
+                    deleteBtn.classList.remove('clicked');
+                }, 1500);
+                
                 const token = prompt('Digite o token de exclusão:');
                 
                 if (token) {
@@ -424,6 +495,26 @@
                         alert('Erro ao excluir arquivo. Tente novamente mais tarde.');
                     });
                 }
+            });
+        }
+
+        // Inicializar eventos dos botões
+        function initializeButtons() {
+            const downloadBtn = document.querySelector('.download-btn');
+            const copyBtn = document.querySelector('.direct-btn');
+            
+            downloadBtn.addEventListener('click', () => {
+                downloadBtn.classList.add('clicked');
+                setTimeout(() => {
+                    downloadBtn.classList.remove('clicked');
+                }, 1500);
+            });
+
+            copyBtn.addEventListener('click', () => {
+                copyBtn.classList.add('clicked');
+                setTimeout(() => {
+                    copyBtn.classList.remove('clicked');
+                }, 1500);
             });
         }
 
@@ -451,6 +542,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
             initializeDelete();
+            initializeButtons();
             initializeVideoPlayer();
 
             const fileSizeElement = document.getElementById('fileSize');
