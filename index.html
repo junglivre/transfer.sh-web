@@ -443,7 +443,7 @@
             <h1 class="title">Transfer</h1>
             <p class="subtitle">Compartilhamento fácil de arquivos, com suporte a linha de comando</p>
             <div class="disclaimers">
-                <p class="file-limit">Limite máximo por arquivo: 2 GB</p>
+                {{if .MaxUploadSize}}<p class="file-limit">Limite máximo por arquivo: {{.MaxUploadSize}}</p>{{end}}
                 <p class="file-limit">Validade dos arquivos: 7 dias</p>
             </div>
 
@@ -464,6 +464,14 @@
     </div>
 
     <script>
+        // Configurações do servidor
+        const maxUploadSize = '{{.MaxUploadSize}}';
+        const maxSizeInBytes = (function() {
+            if (!maxUploadSize) return 0;
+            const numericValue = parseInt(maxUploadSize.replace(/[^0-9]/g, ''));
+            return numericValue * 1024; // Converter KB para bytes
+        })();
+
         // Criar partículas de fundo
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
@@ -516,9 +524,8 @@
 
             function handleFiles(files) {
                 Array.from(files).forEach(file => {
-                    // Verificar tamanho do arquivo (2GB em bytes)
-                    if (file.size > 2 * 1024 * 1024 * 1024) {
-                        showErrorToast(`O arquivo "${file.name}" excede o limite de 2 GB`);
+                    if (maxSizeInBytes > 0 && file.size > maxSizeInBytes) {
+                        showErrorToast(`O arquivo "${file.name}" excede o limite de ${maxUploadSize}`);
                         return;
                     }
                     uploadFile(file);
