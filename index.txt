@@ -1,6 +1,6 @@
 {{.Hostname}}: Compartilhamento fácil de arquivos via linha de comando
 ===
-Feito com ❤️
+Feito com <3
 
 Upload básico:
 $ curl --upload-file ./arquivo.txt {{.WebAddress}}arquivo.txt
