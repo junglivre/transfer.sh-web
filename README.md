@@ -29,28 +29,5 @@ docker run -d \
   --web-path /webapp/
 ```
 
-## Desenvolvimento
-
-### Pré-requisitos
-- Node.js e NPM
-- Go
-- go-bindata (`go get -u github.com/shuLhan/go-bindata/...`)
-
-### Instalação
-1. Instale as dependências:
-```bash
-npm install
-```
-
-2. Gere os arquivos estáticos:
-```bash
-npm run build
-```
-
-3. Gere os binários Go:
-```bash
-go generate .
-```
-
 ## Licença
 Veja o arquivo [LICENSE](LICENSE) para detalhes.
