@@ -406,6 +406,20 @@
             color: #fff;
         }
 
+        /* Ajustando os estilos */
+        .disclaimers {
+            margin-top: -15px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 0.4s forwards;
+        }
+
+        .file-limit {
+            font-size: 0.9rem;
+            color: #8a9ab0;
+            margin: 5px 0;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -428,7 +442,10 @@
         <div class="upload-box">
             <h1 class="title">Transfer</h1>
             <p class="subtitle">Compartilhamento fácil de arquivos, com suporte a linha de comando</p>
-            <p class="file-limit">Limite máximo por arquivo: 2 GB</p>
+            <div class="disclaimers">
+                <p class="file-limit">Limite máximo por arquivo: 2 GB</p>
+                <p class="file-limit">Validade dos arquivos: 7 dias</p>
+            </div>
 
             <div class="terminal">
                 <code>
