@@ -466,11 +466,30 @@
     <script>
         // Configurações do servidor
         const maxUploadSize = '{{.MaxUploadSize}}';
-        const maxSizeInBytes = (function() {
-            if (!maxUploadSize) return 0;
-            const numericValue = parseInt(maxUploadSize.replace(/[^0-9]/g, ''));
-            return numericValue * 1024; // Converter KB para bytes
-        })();
+        
+        // Função para converter string de tamanho (ex: "1 GB", "500 MB") para bytes
+        const convertToBytes = (sizeStr) => {
+            if (!sizeStr) return 0;
+            
+            const units = {
+                'B': 1,
+                'KB': 1024,
+                'MB': 1024 * 1024,
+                'GB': 1024 * 1024 * 1024
+            };
+
+            const matches = sizeStr.match(/^(\d+(?:\.\d+)?)\s*([KMGT]?B)$/i);
+            if (!matches) return 0;
+
+            const size = parseFloat(matches[1]);
+            const unit = matches[2].toUpperCase();
+
+            return size * (units[unit] || 0);
+        };
+
+        const maxSizeInBytes = convertToBytes(maxUploadSize);
+        console.log('Debug - maxUploadSize:', maxUploadSize);
+        console.log('Debug - maxSizeInBytes:', maxSizeInBytes);
 
         // Criar partículas de fundo
         function createParticles() {
@@ -524,6 +543,10 @@
 
             function handleFiles(files) {
                 Array.from(files).forEach(file => {
+                    console.log('Debug - Arquivo:', file.name);
+                    console.log('Debug - Tamanho do arquivo (bytes):', file.size);
+                    console.log('Debug - Tamanho máximo (bytes):', maxSizeInBytes);
+                    
                     if (maxSizeInBytes > 0 && file.size > maxSizeInBytes) {
                         showErrorToast(`O arquivo "${file.name}" excede o limite de ${maxUploadSize}`);
                         return;

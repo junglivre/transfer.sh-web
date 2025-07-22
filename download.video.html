@@ -6,6 +6,8 @@
     <title>Transfer - Download</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -470,14 +472,27 @@
         function initializeDelete() {
             const deleteBtn = document.getElementById('deleteBtn');
             
-            deleteBtn.addEventListener('click', (e) => {
+            deleteBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 deleteBtn.classList.add('clicked');
                 setTimeout(() => {
                     deleteBtn.classList.remove('clicked');
                 }, 1500);
-                
-                const token = prompt('Digite o token de exclusão:');
+
+                const { value: token } = await Swal.fire({
+                    title: 'Token de Exclusão',
+                    input: 'text',
+                    inputLabel: 'Digite o token para excluir o arquivo',
+                    inputPlaceholder: 'Token',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Excluir',
+                    background: 'linear-gradient(135deg, #0a1019 0%, #0f1520 100%)',
+                    color: '#fff',
+                    confirmButtonColor: '#ff5f56',
+                    cancelButtonColor: '#5395cf',
+                    padding: '2em'
+                });
                 
                 if (token) {
                     fetch(window.location.pathname + '/' + token, {
@@ -485,14 +500,42 @@
                     })
                     .then(response => {
                         if (response.ok) {
-                            alert('Arquivo excluído com sucesso!');
-                            window.location.href = '/';
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Arquivo excluído com sucesso!',
+                                text: 'Você será redirecionado para a página inicial.',
+                                background: 'linear-gradient(135deg, #0a1019 0%, #0f1520 100%)',
+                                color: '#fff',
+                                confirmButtonColor: '#27c93f',
+                                timer: 2500,
+                                timerProgressBar: true,
+                                padding: '2em',
+                                didClose: () => {
+                                    window.location.href = '../../';
+                                }
+                            });
                         } else {
-                            alert('Erro ao excluir arquivo. Verifique o token e tente novamente.');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro ao excluir arquivo',
+                                text: 'Verifique o token e tente novamente.',
+                                background: 'linear-gradient(135deg, #0a1019 0%, #0f1520 100%)',
+                                color: '#fff',
+                                confirmButtonColor: '#5395cf',
+                                padding: '2em'
+                            });
                         }
                     })
                     .catch(error => {
-                        alert('Erro ao excluir arquivo. Tente novamente mais tarde.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao excluir arquivo',
+                            text: 'Tente novamente mais tarde.',
+                            background: 'linear-gradient(135deg, #0a1019 0%, #0f1520 100%)',
+                            color: '#fff',
+                            confirmButtonColor: '#5395cf',
+                            padding: '2em'
+                        });
                     });
                 }
             });
